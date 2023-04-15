@@ -11,6 +11,7 @@ const Navigation = () => {
     fontSize: "22px",
     display: "flex",
     alignItems: "center",
+    width: "fit-content",
   };
 
   const logoText = {

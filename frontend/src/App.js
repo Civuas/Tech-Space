@@ -5,17 +5,15 @@ import NavbarWrapper from "./components/shared/Navigation/NavWrapper";
 import Authenticate from "./pages/Authenticate/Authenticate";
 import Activate from "./pages/Activate/Activate";
 import Rooms from "./pages/Rooms/Rooms";
-
-let isAuth = false;
-const user = {
-  activated: false,
-};
+import { useSelector } from "react-redux";
 
 const GuestRoute = () => {
+  const { isAuth } = useSelector((state) => state.auth);
   return isAuth ? <Navigate to="/rooms" replace={true} /> : <Outlet />;
 };
 
 const SemiProtected = () => {
+  const { isAuth, user } = useSelector((state) => state.auth);
   const location = useLocation();
   return !isAuth ? (
     <Navigate to="/" replace={true} state={{ from: location.pathname }} />
@@ -27,6 +25,7 @@ const SemiProtected = () => {
 };
 
 const Protected = () => {
+  const { isAuth, user } = useSelector((state) => state.auth);
   const location = useLocation();
   return !isAuth ? (
     <Navigate to="/" replace={true} state={{ from: location.pathname }} />

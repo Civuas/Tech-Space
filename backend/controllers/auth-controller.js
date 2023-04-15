@@ -2,13 +2,14 @@ const otpService = require("../services/otp-service");
 const hashService = require("../services/hash-service");
 const userService = require("../services/user-service");
 const tokenService = require("../services/token-service");
+const UserDto = require("../dtos/user-dto");
 
 class AuthController {
   async sendOtp(req, res) {
     //Logic
     const { phone } = req.body;
     if (!phone) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "Phone field is required",
       });
     }
@@ -23,14 +24,15 @@ class AuthController {
 
     //send Otp
     try {
-      await otpService.sendBySms(phone, otp);
-      res.json({
+      // await otpService.sendBySms(phone, otp);
+      return res.json({
         hash: `${hash}.${expires}`,
         phone: phone,
+        otp,
       });
     } catch (error) {
       console.log(error);
-      res.status(500).json({
+      return res.status(500).json({
         message: "Message sending failed",
       });
     }
@@ -77,8 +79,8 @@ class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       httpOnly: true,
     });
-
-    res.json({ accessToken });
+    const userDto = new UserDto(user);
+    res.json({ accessToken, user: userDto });
   }
 }
 
