@@ -15,7 +15,11 @@ const Authenticate = () => {
     setStep(step + 1);
   }
 
-  return <Step onNext={onNext} />;
+  return (
+    <div className="cardWrapper">
+      <Step onNext={onNext} />
+    </div>
+  );
 };
 
 export default Authenticate;

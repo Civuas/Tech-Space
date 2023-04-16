@@ -27,19 +27,17 @@ const StepOtp = () => {
   };
   return (
     <>
-      <div className={styles.cardWrapper}>
-        <Card title="Enter the code we just texted you" icon={lock}>
-          <TextInput value={otp} onChange={(e) => setOtp(e.target.value)} />
-          <div>
-            <div className={styles.actionButtonWrap}>
-              <Button text="Next" onClick={handleSubmit} />
-            </div>
-            <p className={styles.bottomParagraph}>
-              By entering your number, you're agreeing to our Terms of Services and Privacy Policy. Thanks!
-            </p>
+      <Card title="Enter the code we just texted you" icon={lock}>
+        <TextInput value={otp} onChange={(e) => setOtp(e.target.value)} />
+        <div>
+          <div className={styles.actionButtonWrap}>
+            <Button text="Next" onClick={handleSubmit} />
           </div>
-        </Card>
-      </div>
+          <p className={styles.bottomParagraph}>
+            By entering your number, you're agreeing to our Terms of Services and Privacy Policy. Thanks!
+          </p>
+        </div>
+      </Card>
     </>
   );
 };

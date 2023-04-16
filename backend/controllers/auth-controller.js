@@ -52,12 +52,15 @@ class AuthController {
     }
 
     const data = `${phone}.${otp}.${expires}`;
+
     const isValid = otpService.verifyOtp(hashedOtp, data);
+
     if (!isValid) {
       return res.status(400).json({
         message: "Invalid OTP",
       });
     }
+
     let user;
 
     try {
@@ -75,12 +78,20 @@ class AuthController {
     //generate Token
     const { accessToken, refreshToken } = tokenService.generateTokens({ _id: user._id, activated: false });
 
+    await tokenService.storeRefreshToken(refreshToken, user._id);
+
     res.cookie("refreshToken", refreshToken, {
       maxAge: 1000 * 60 * 60 * 24 * 30,
       httpOnly: true,
     });
+
+    res.cookie("accessToken", accessToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+      httpOnly: true,
+    });
+
     const userDto = new UserDto(user);
-    res.json({ accessToken, user: userDto });
+    res.json({ user: userDto, auth: true });
   }
 }
 

@@ -18,24 +18,22 @@ const StepPhoneEmail = ({ onNext }) => {
 
   return (
     <>
-      <div className={styles.cardWrapper}>
-        <div>
-          <div className={styles.buttonWrapper}>
-            <button
-              className={`${styles.tabButton} ${type === "phone" ? styles.active : ""}`}
-              onClick={() => setType("phone")}
-            >
-              <img src={phone} alt="phone" />
-            </button>
-            <button
-              className={`${styles.tabButton} ${type === "email" ? styles.active : ""}`}
-              onClick={() => setType("email")}
-            >
-              <img src={email} alt="email" />
-            </button>
-          </div>
-          <Component onNext={onNext} />
+      <div>
+        <div className={styles.buttonWrapper}>
+          <button
+            className={`${styles.tabButton} ${type === "phone" ? styles.active : ""}`}
+            onClick={() => setType("phone")}
+          >
+            <img src={phone} alt="phone" />
+          </button>
+          <button
+            className={`${styles.tabButton} ${type === "email" ? styles.active : ""}`}
+            onClick={() => setType("email")}
+          >
+            <img src={email} alt="email" />
+          </button>
         </div>
+        <Component onNext={onNext} />
       </div>
     </>
   );

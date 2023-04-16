@@ -19,7 +19,7 @@ const Home = () => {
     navigate("/authenticate");
   };
   return (
-    <div className={styles.cardWrapper}>
+    <div className="cardWrapper">
       <Card icon={hand} title="Welcome to TechSpace !!!">
         <p className={styles.text}>
           We're working hard to get TechSpace ready for everyone! While we wrap up the finishing <br /> touches, we're
