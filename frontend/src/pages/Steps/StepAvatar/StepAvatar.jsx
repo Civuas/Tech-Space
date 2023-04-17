@@ -11,9 +11,11 @@ import styles from "./StepAvatar.module.css";
 import { setAvatar } from "../../../store/activateSlice";
 import { setAuth } from "../../../store/authSlice";
 import { activate } from "../../../http";
+import Loader from "../../../components/shared/Loader/Loader";
 
 const StepAvatar = ({ onNext }) => {
   const [image, setImage] = useState(avatarImg);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const { name, avatar } = useSelector((state) => state.activate);
@@ -29,16 +31,22 @@ const StepAvatar = ({ onNext }) => {
   };
 
   const handleSubmit = async () => {
+    if (!name || !avatar) return;
+    setLoading(true);
     try {
       const { data } = await activate({ name, avatar });
       if (data.auth) {
         dispatch(setAuth(data));
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) return <Loader message="Activation in progress" />;
+
   return (
     <>
       <Card title={`Okay, ${name}`} icon={faceWg}>
