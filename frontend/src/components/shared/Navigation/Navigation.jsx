@@ -5,10 +5,11 @@ import Logo from "../../../assets/logo.png";
 import { logout } from "../../../http";
 import { setAuth } from "../../../store/authSlice";
 import styles from "./Navigation.module.css";
+import arrow from "../../../assets/arrow.png";
 
 const Navigation = () => {
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((state) => state.auth);
+  const { isAuth, user } = useSelector((state) => state.auth);
   const brandStyle = {
     color: "#fff",
     textDecoration: "none",
@@ -38,7 +39,24 @@ const Navigation = () => {
         <img src={Logo} alt="logo" />
         <span style={logoText}>TechSpace</span>
       </Link>
-      {isAuth && <button onClick={logoutUser}>Logout</button>}
+      {isAuth && (
+        <div className={styles.navRight}>
+          <h3>{user.name}</h3>
+          <Link to="/">
+            <img src={user.avatar} className={styles.avatar} alt="avatar" />
+          </Link>
+          <button className={styles.logoutButton} onClick={logoutUser}>
+            <img src={arrow} alt="logout" />
+          </button>
+        </div>
+      )}
+      {/* {isAuth && (
+          <button className={styles.logoutButton} onClick={logoutUser}>
+            <img src={arrow} alt="logout" />
+          </button>
+        )} */}
+
+      {/* {isAuth && <button onClick={logoutUser}>Logout</button>} */}
     </nav>
   );
 };

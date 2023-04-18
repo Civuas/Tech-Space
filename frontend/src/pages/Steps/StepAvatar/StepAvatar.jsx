@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import React, { useState } from "react";
 import Card from "../../../components/shared/Card/Card";
 import Button from "../../../components/shared/Button/Button";
@@ -16,6 +16,7 @@ import Loader from "../../../components/shared/Loader/Loader";
 const StepAvatar = ({ onNext }) => {
   const [image, setImage] = useState(avatarImg);
   const [loading, setLoading] = useState(false);
+  const [unMounted, setUnMounted] = useState(false);
   const dispatch = useDispatch();
 
   const { name, avatar } = useSelector((state) => state.activate);
@@ -36,7 +37,9 @@ const StepAvatar = ({ onNext }) => {
     try {
       const { data } = await activate({ name, avatar });
       if (data.auth) {
-        dispatch(setAuth(data));
+        if (!unMounted) {
+          dispatch(setAuth(data));
+        }
       }
     } catch (error) {
       console.log(error);
@@ -44,6 +47,12 @@ const StepAvatar = ({ onNext }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      setUnMounted(true);
+    };
+  }, []);
 
   if (loading) return <Loader message="Activation in progress" />;
 
