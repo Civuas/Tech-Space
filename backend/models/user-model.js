@@ -15,6 +15,12 @@ const userSchema = new Schema(
     avatar: {
       type: String,
       required: false,
+      get: (avatar) => {
+        if (avatar) {
+          return `${process.env.BASE_URL}${avatar}`;
+        }
+        return avatar;
+      },
     },
     activated: {
       type: Boolean,
@@ -22,7 +28,7 @@ const userSchema = new Schema(
       default: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { getters: true } }
 );
 
 const User = mongoose.model("User", userSchema);

@@ -8,6 +8,7 @@ import Rooms from "./pages/Rooms/Rooms";
 import { useSelector } from "react-redux";
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 import Loader from "./components/shared/Loader/Loader";
+import Room from "./pages/Room/Room";
 
 const GuestRoute = () => {
   const { isAuth } = useSelector((state) => state.auth);
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
             path: "/rooms",
             element: <Rooms />,
           },
+          {
+            path: "/rooms/:id",
+            element: <Room />,
+          },
         ],
       },
     ],
@@ -83,9 +88,9 @@ const router = createBrowserRouter([
 function App() {
   // call refresh endpoint
 
-  const { loading } = useLoadingWithRefresh();
+  const { isLoading } = useLoadingWithRefresh();
 
-  return loading ? (
+  return isLoading ? (
     <Loader message="Loading , please wait ..." />
   ) : (
     <div className="App">

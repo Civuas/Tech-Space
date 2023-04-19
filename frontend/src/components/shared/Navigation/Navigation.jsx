@@ -6,6 +6,7 @@ import { logout } from "../../../http";
 import { setAuth } from "../../../store/authSlice";
 import styles from "./Navigation.module.css";
 import arrow from "../../../assets/arrow.png";
+import defaultImg from "../../../assets/avatar.png";
 
 const Navigation = () => {
   const dispatch = useDispatch();
@@ -41,22 +42,17 @@ const Navigation = () => {
       </Link>
       {isAuth && (
         <div className={styles.navRight}>
-          <h3>{user.name}</h3>
+          <h3>{user?.name}</h3>
+
           <Link to="/">
-            <img src={user.avatar} className={styles.avatar} alt="avatar" />
+            <img src={user.avatar ? user.avatar : defaultImg} className={styles.avatar} alt="avatar" />
           </Link>
+
           <button className={styles.logoutButton} onClick={logoutUser}>
             <img src={arrow} alt="logout" />
           </button>
         </div>
       )}
-      {/* {isAuth && (
-          <button className={styles.logoutButton} onClick={logoutUser}>
-            <img src={arrow} alt="logout" />
-          </button>
-        )} */}
-
-      {/* {isAuth && <button onClick={logoutUser}>Logout</button>} */}
     </nav>
   );
 };
