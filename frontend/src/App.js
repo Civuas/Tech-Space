@@ -11,8 +11,14 @@ import Loader from "./components/shared/Loader/Loader";
 import Room from "./pages/Room/Room";
 
 const GuestRoute = () => {
+  const location = useLocation();
+
   const { isAuth } = useSelector((state) => state.auth);
-  return isAuth ? <Navigate to="/rooms" replace={true} /> : <Outlet />;
+  return isAuth ? (
+    <Navigate to={location.state?.from || "/rooms"} replace={true} state={{ from: location.pathname }} />
+  ) : (
+    <Outlet />
+  );
 };
 
 const SemiProtected = () => {
