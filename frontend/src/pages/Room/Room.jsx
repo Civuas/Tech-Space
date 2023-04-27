@@ -7,14 +7,17 @@ import arrowBack from "../../assets/arrowback.png";
 import palm from "../../assets/palm.png";
 import peace from "../../assets/peaceSign.png";
 import micmute from "../../assets/mic-mute.png";
+import mic from "../../assets/mic.png";
 import { getRoom } from "../../http";
 
 const Room = () => {
   const { id: roomId } = useParams();
   const user = useSelector((state) => state.auth.user);
-  const { clients, provideRef } = useWebRTC(roomId, user);
+
+  const { clients, provideRef, handleMute } = useWebRTC(roomId, user);
   const navigate = useNavigate();
   const [room, setRoom] = useState(null);
+  const [isMute, setIsMute] = useState(true);
 
   const handleManualLeave = () => {
     navigate("/rooms");
@@ -27,6 +30,15 @@ const Room = () => {
     };
     fetchRoom();
   }, [roomId]);
+
+  useEffect(() => {
+    handleMute(isMute, user.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMute]);
+  const handleMuteClick = (clientId) => {
+    if (clientId !== user.id) return;
+    setIsMute((prev) => !prev);
+  };
   return (
     <div>
       <div className="container">
@@ -55,8 +67,8 @@ const Room = () => {
                 <div className={styles.userHead}>
                   <audio ref={(instance) => provideRef(instance, client.id)} autoPlay></audio>
                   <img className={styles.userAvatar} src={client.avatar} alt="client-avatar" />
-                  <button className={styles.micBtn}>
-                    <img src={micmute} alt="mute-mic-icon" />
+                  <button onClick={() => handleMuteClick(client.id)} className={styles.micBtn}>
+                    {client.muted ? <img src={micmute} alt="mute-mic-icon" /> : <img src={mic} alt="mic-icon" />}
                   </button>
                 </div>
                 <h4>{client.name}</h4>
