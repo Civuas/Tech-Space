@@ -16,7 +16,7 @@ const server = require("http").createServer(app);
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.FRONT_URL,
     methods: ["GET", "POST"],
   },
 });
@@ -24,7 +24,7 @@ const io = require("socket.io")(server, {
 app.use(cookieParser());
 const corsOption = {
   credentials: true,
-  origin: ["http://localhost:3000"],
+  origin: [process.env.FRONT_URL],
 };
 
 app.use(cors(corsOption));
@@ -50,13 +50,13 @@ const socketUserMapping = {};
 io.on("connection", (socket) => {
   console.log("new connection", socket.id);
 
-  socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
+  socket.on(ACTIONS.JOIN, async ({ roomId, user }) => {
     socketUserMapping[socket.id] = user;
 
-    // new Map
-    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+    // const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+    const clients = await io.in(roomId).fetchSockets();
 
-    clients.forEach((clientId) => {
+    clients.forEach(({ id: clientId }) => {
       io.to(clientId).emit(ACTIONS.ADD_PEER, {
         peerId: socket.id,
         createOffer: false,
@@ -89,7 +89,6 @@ io.on("connection", (socket) => {
   });
 
   // Handle mute/unmute
-
   socket.on(ACTIONS.MUTE, ({ roomId, userId }) => {
     const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
 
@@ -110,6 +109,17 @@ io.on("connection", (socket) => {
       });
     });
   });
+  socket.on(ACTIONS.MUTE_INFO, ({ userId, roomId, isMute }) => {
+    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+    clients.forEach((clientId) => {
+      if (clientId !== socket.id) {
+        io.to(clientId).emit(ACTIONS.MUTE_INFO, {
+          userId,
+          isMute,
+        });
+      }
+    });
+  });
   // Leaving the room
   const leaveRoom = ({ roomId }) => {
     const { rooms } = socket;
@@ -121,10 +131,10 @@ io.on("connection", (socket) => {
           peerId: socket.id,
           userId: socketUserMapping[socket.id]?.id,
         });
-        socket.emit(ACTIONS.REMOVE_PEER, {
-          peerId: clientId,
-          userId: socketUserMapping[clientId]?.id,
-        });
+        // socket.emit(ACTIONS.REMOVE_PEER, {
+        //   peerId: clientId,
+        //   userId: socketUserMapping[clientId]?.id,
+        // });
       });
       socket.leave(roomId);
     });

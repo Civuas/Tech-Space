@@ -9,6 +9,7 @@ const ACTIONS = {
   REMOVE_PEER: "remove-peer",
   MUTE: "mute",
   UN_MUTE: "un-mute",
+  MUTE_INFO: "mute-info",
 };
 
 module.exports = ACTIONS;

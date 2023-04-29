@@ -24,11 +24,10 @@ class AuthController {
 
     //send Otp
     try {
-      // await otpService.sendBySms(phone, otp);
+      await otpService.sendBySms(phone, otp);
       return res.json({
         hash: `${hash}.${expires}`,
         phone: phone,
-        otp,
       });
     } catch (error) {
       return res.status(500).json({
