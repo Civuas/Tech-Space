@@ -20,7 +20,7 @@ const Authenticate = () => {
     <div className="cardWrapper">
       <ToastContainer
         position="top-right"
-        autoClose={15 * 1000}
+        autoClose={5 * 1000}
         newestOnTop={false}
         closeOnClick
         rtl={false}

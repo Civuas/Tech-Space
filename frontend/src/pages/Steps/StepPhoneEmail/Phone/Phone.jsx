@@ -21,36 +21,37 @@ const Phone = ({ onNext }) => {
 
   const handleSubmit = async () => {
     //server request
-    try {
-      if (phoneNumber.length < 10 || validatePhoneNo(phoneNumber)) {
-        return;
-      }
-      const { data } = await sendOtp({ phone: phoneNumber });
-      dispatch(setOtp({ phone: data.phone, hash: data.hash }));
-      const resolveWithSomeData = new Promise((resolve) => setTimeout(() => resolve(`${data.otp}`), 3000));
-      toast.promise(resolveWithSomeData, {
-        pending: {
-          render() {
-            return "Please wait a moment";
-          },
-          theme: "dark",
-        },
-        success: {
-          render({ data }) {
-            return `🐦 Your 4 digit OTP : ${data}`;
-          },
-          theme: "dark",
-        },
-        error: {
-          render({ data }) {
-            return `Sorry Our servers are down . Please try again later `;
-          },
-        },
-      });
-      onNext();
-    } catch (error) {
-      console.log("Phone error: ", error);
+    if (phoneNumber.length < 10 || validatePhoneNo(phoneNumber)) {
+      return;
     }
+    // Send OTP
+    sendOtp({ phone: phoneNumber })
+      .then(({ data }) => {
+        dispatch(setOtp({ phone: data.phone, hash: data.hash }));
+        const resolveWithSomeData = new Promise((resolve) => setTimeout(() => resolve(`${data.otp}`), 3000));
+        toast.promise(resolveWithSomeData, {
+          pending: {
+            render() {
+              return "Please wait a moment";
+            },
+            theme: "dark",
+          },
+          success: {
+            render({ data }) {
+              return `🐦 Your 4 digit OTP : ${data}`;
+            },
+            theme: "dark",
+          },
+        });
+      })
+      .catch((error) => {
+        toast.error("Sorry, our servers are down. Please try again later.", {
+          theme: "dark",
+          position: "top-center",
+          autoClose: 7000,
+        });
+      });
+    onNext();
   };
 
   return (

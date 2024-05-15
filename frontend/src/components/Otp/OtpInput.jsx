@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./OtpInput.module.css";
 
-const OtpInput = ({ length = 4, onOtpSubmit = () => {}, setFinalOtp }) => {
+const OtpInput = ({ length = 4, setFinalOtp, clearOtp }) => {
   const [otp, setOtp] = useState(new Array(length).fill(""));
   const inputRefs = useRef([]);
 
@@ -10,6 +10,12 @@ const OtpInput = ({ length = 4, onOtpSubmit = () => {}, setFinalOtp }) => {
       inputRefs.current[0].focus();
     }
   }, []);
+
+  useEffect(() => {
+    if (clearOtp) {
+      setOtp(new Array(length).fill(""));
+    }
+  }, [clearOtp]);
 
   const handleChange = (index, e) => {
     const value = e.target.value;

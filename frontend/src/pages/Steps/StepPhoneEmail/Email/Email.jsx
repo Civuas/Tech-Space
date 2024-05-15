@@ -47,7 +47,7 @@ const Email = ({ onNext }) => {
       dispatch(setOtp({ phone: null, hash: data.hash, email: data.email }));
       toast.success(`OTP has been sent to your email`, {
         position: "top-right",
-        autoClose: true,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
