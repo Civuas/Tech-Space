@@ -32,7 +32,7 @@ const StepAvatar = ({ onNext }) => {
   };
 
   const handleSubmit = async () => {
-    if (!name || !avatar) return;
+    if (!name) return;
     setLoading(true);
     try {
       const { data } = await activate({ name, avatar });

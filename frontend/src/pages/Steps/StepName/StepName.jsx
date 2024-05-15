@@ -6,12 +6,12 @@ import TextInput from "../../../components/shared/TextInput/TextInput";
 import smiley from "../../../assets/smiley.png";
 import styles from "./StepName.module.css";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setName } from "../../../store/activateSlice";
 
 const StepName = ({ onNext }) => {
-  const { name } = useSelector((state) => state.activate);
-  const [fullname, setFullname] = useState(name);
+  // const { name } = useSelector((state) => state.activate);
+  const [fullname, setFullname] = useState("");
   const dispatch = useDispatch();
 
   const nextStep = () => {
@@ -24,7 +24,7 @@ const StepName = ({ onNext }) => {
 
   return (
     <>
-      <Card title="What's your full name?" icon={smiley}>
+      <Card title="What's your name ?" icon={smiley}>
         <TextInput value={fullname} onChange={(e) => setFullname(e.target.value)} />
         <div>
           <p className={styles.paragraph}>We recommend using real names at techSpace !</p>

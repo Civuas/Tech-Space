@@ -21,7 +21,7 @@ const Home = () => {
           <Button onClick={startRegister} text="Let's Go" />
         </div>
         <div className={styles.signInWrapper}>
-          <span className={styles.hasInvite}>Have a invite text?</span>
+          {/* <span className={styles.hasInvite}>Have a invite text?</span> */}
           {/* <Link style={signInLinkStyle} to="/login">
             Sign in
           </Link> */}

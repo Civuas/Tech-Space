@@ -7,6 +7,9 @@ import Card from "../../../../components/shared/Card/Card";
 import TextInput from "../../../../components/shared/TextInput/TextInput";
 
 import { sendOtp } from "../../../../http";
+import { toast } from "react-toastify";
+
+import { validatePhoneNo } from "../../../../util/validator";
 
 import phone from "../../../../assets/phone.png";
 import styles from "../StepPhoneEmail.module.css";
@@ -19,12 +22,31 @@ const Phone = ({ onNext }) => {
   const handleSubmit = async () => {
     //server request
     try {
-      if (!phoneNumber) {
+      if (phoneNumber.length < 10 || validatePhoneNo(phoneNumber)) {
         return;
       }
       const { data } = await sendOtp({ phone: phoneNumber });
       dispatch(setOtp({ phone: data.phone, hash: data.hash }));
-      console.log(data);
+      const resolveWithSomeData = new Promise((resolve) => setTimeout(() => resolve(`${data.otp}`), 3000));
+      toast.promise(resolveWithSomeData, {
+        pending: {
+          render() {
+            return "Please wait a moment";
+          },
+          theme: "dark",
+        },
+        success: {
+          render({ data }) {
+            return `🐦 Your 4 digit OTP : ${data}`;
+          },
+          theme: "dark",
+        },
+        error: {
+          render({ data }) {
+            return `Sorry Our servers are down . Please try again later `;
+          },
+        },
+      });
       onNext();
     } catch (error) {
       console.log("Phone error: ", error);
@@ -32,8 +54,8 @@ const Phone = ({ onNext }) => {
   };
 
   return (
-    <Card icon={phone} title="Enter your phone no.">
-      <TextInput value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+    <Card icon={phone} title="Enter your phone number">
+      <TextInput value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} type={"number"} />
       <div>
         <div className={styles.actionButtonWrap}>
           <Button text="Next" onClick={handleSubmit} />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StepPhoneEmail from "../Steps/StepPhoneEmail/StepPhoneEmail";
 import StepOtp from "../Steps/StepOtp/StepOtp";
+import { ToastContainer } from "react-toastify";
 
 const steps = {
   1: StepPhoneEmail,
@@ -17,6 +18,17 @@ const Authenticate = () => {
 
   return (
     <div className="cardWrapper">
+      <ToastContainer
+        position="top-right"
+        autoClose={15 * 1000}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        theme="light"
+        style={{ width: "fit-content" }}
+      />
       <Step onNext={onNext} />
     </div>
   );
